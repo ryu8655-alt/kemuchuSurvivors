@@ -32,13 +32,16 @@ public class PlayerController : MonoBehaviour
     //各種コンポーネント取得用変数
     private Rigidbody2D _rigidbody2d;
     //private Animator _animator;   //後でStart内で取得の処理を入れる
-
+    GameSceneManager _gameManager;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        this._gameManager = GameObject.Find("GameSceneManager").GetComponent<GameSceneManager>();
+
+
         //Rigidbody2Dの取得
         _rigidbody2d = GetComponent<Rigidbody2D>();
         _forward = Vector2.right;//右方向に決め打ち→後でInitに移す
@@ -89,7 +92,10 @@ public class PlayerController : MonoBehaviour
     {
          //入力がないときは処理を抜ける
         if(_moveInput== Vector2.zero) return;
+       //移動範囲の制限処理
+        ClampToMoveBounds(_rigidbody2d.position);
 
+        //プレイヤーの移動処理
         _rigidbody2d.MovePosition(_rigidbody2d.position + _moveInput * _moveSpeed * Time.fixedDeltaTime);
 
         if (_moveInput.x != 0)
@@ -98,13 +104,20 @@ public class PlayerController : MonoBehaviour
             scale.x = Mathf.Sign(_moveInput.x) * Mathf.Abs(scale.x);//移動方向に応じて向きを変える
             transform.localScale = scale;
         }
-        //TODO　移動範囲の制限処理を追加する
-
         //TODO　アニメーションの処理を追加する
 
         _forward = _moveInput;//移動方向を更新
 
+    }
 
-
+    /// <summary>
+    /// プレイヤーの移動制限処理
+    /// </summary>
+    private void  ClampToMoveBounds(Vector3 position)
+    {
+        Vector2 pos = _rigidbody2d.position;
+        pos.x = Mathf.Clamp(pos.x, _gameManager._worldStart.x, _gameManager._worldEnd.x);
+        pos.y = Mathf.Clamp(pos.y, _gameManager._worldStart.y, _gameManager._worldEnd.y);
+        _rigidbody2d.position = pos;
     }
 }

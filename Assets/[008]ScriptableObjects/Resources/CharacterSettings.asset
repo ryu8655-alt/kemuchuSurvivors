@@ -31,4 +31,4 @@ MonoBehaviour:
     _defaultWeaponIds: 
     _usableWeaponIds: 
     _usableWeaponMax: 0
-    _moveType: 0
+    _moveType: 1

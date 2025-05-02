@@ -1,27 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using DG.Tweening;
-using TMPro.EditorUtilities;
-using UnityEditor;
+using UnityEngine;
+
+
+/// <summary>
+/// 敵キャラクターの制御を行うクラス
+/// 移動、ライフタイマー、死亡時の演出などのロジックを担当
+/// </summary>
 
 public class EnemyController : MonoBehaviour
 {
 
     public CharacterStatus _characterStatus;
 
-    [SerializeField] GameSceneManager _gameSceneManager;
-    Rigidbody2D _rigidbody2d;
+    [SerializeField,Header("GameSceneManager")]
+    private GameSceneManager _gameSceneManager;
+    
+    private Rigidbody2D _rigidbody2d;
 
     //攻撃クールダウン変数
-    float _attackCooldownTimer;//クールダウン計測用変数
-    float _attackCooldownMax = 0.5f;//クールダウンの上限値
+    private  float _attackCooldownTimer;//クールダウン計測用変数
+    private float _attackCooldownMax = 0.5f;//クールダウンの上限値
 
     //移動方向
-    Vector2 _forward;
+    private Vector2 _forward;
 
     //状態
-    enum State
+    private enum State
     {
         Alive,
         Dead,
@@ -42,7 +46,11 @@ public class EnemyController : MonoBehaviour
         MoveEnemy();
     }
 
-
+/// <summary>
+/// 初期化処理(SceneManagerとキャラクター情報の設定)を行う
+/// </summary>
+/// <param name="sceneManager"></param>
+/// <param name="characterStatus"></param>
     public void init(GameSceneManager sceneManager, CharacterStatus characterStatus)
     {
         this._gameSceneManager = sceneManager;
@@ -50,12 +58,23 @@ public class EnemyController : MonoBehaviour
 
         _rigidbody2d = GetComponent<Rigidbody2D>();
 
-        //アニメーション演出
-        //ランダムを活用して緩急をつける
+        AnimateSpawn();
+        SetInitalizeDirection();
+
+        _state = State.Alive;
+    }
+
+    /// <summary>
+    /// 敵のアニメーション演出の設定を行う
+    /// </summary>
+    
+    private void AnimateSpawn()
+    {
+        //アニメーション演出(ふわふわとした動きになる)
         float random = 0.8f;
         float speed = 1 / _characterStatus.MoveSpeed * random;
 
-        //サイズ
+        //サイズ演出
         float addx = 0.8f;
         float x = addx * random;
         transform.DOScale(x, speed).SetRelative().SetLoops(-1, LoopType.Yoyo);
@@ -63,23 +82,27 @@ public class EnemyController : MonoBehaviour
         //回転演出
         float addz = 10f;
         float z = Random.Range(-addz, addz) * random;
-        //初期値
         Vector3 rotation = transform.rotation.eulerAngles;
         rotation.z = z;
-        //目標値
         transform.eulerAngles = rotation;
         transform.DORotate(new Vector3(0, 0, -z), speed).SetLoops(-1, LoopType.Yoyo);
 
-        //進行方向
+    }
+
+    /// <summary>
+    /// 初期進行方向をプレイヤーの方向に設定する
+    /// </summary>
+    private void SetInitalizeDirection()
+    {
         PlayerController player = _gameSceneManager._playerController;
         Vector2 dir = player.transform.position - transform.position;
         _forward = dir;
-
-        _state = State.Alive;
     }
 
 
-    //敵の移動
+    /// <summary>
+    ///敵の行動を設定されたMoveTypeに従って行う
+    /// </summary>
     private void MoveEnemy()
     {
         if (State.Alive != _state) return;
@@ -96,7 +119,9 @@ public class EnemyController : MonoBehaviour
         _rigidbody2d.position += _forward.normalized * _characterStatus.MoveSpeed * Time.deltaTime;
     }
 
-    //各種内部タイマーの更新
+    /// <summary>
+    /// 内部クールダウンおよび生存時間の更新処理
+    /// </summary>
     private void UpdateTimer()
     {
         if (0 < _attackCooldownTimer)
@@ -112,7 +137,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// 敵の死亡処理
+    /// </summary>
     private void SetDead(bool createXP = true)
     {
         if (State.Alive != _state) return;

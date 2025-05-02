@@ -58,31 +58,79 @@ public class BaseCharacterStatus
     //紐づけにはインデクサを使用する
     public float this[CharacterStatusType type]
     {
-        get
+        //get
+        //{
+        //    if(type == CharacterStatusType.Attack) return Attack;
+        //    else if (type == CharacterStatusType.Defense) return Defense;
+        //    else if (type == CharacterStatusType.MoveSpeed) return MoveSpeed;
+        //    else if (type == CharacterStatusType.HP) return HP;
+        //    else if (type == CharacterStatusType.MaxHP) return MaxHP;
+        //    else if (type == CharacterStatusType.XP) return XP;
+        //    else if (type == CharacterStatusType.MaxXP) return MaxXP;
+        //    else if (type == CharacterStatusType.PickUpRange) return PickUpRange;
+        //    else if (type == CharacterStatusType.AliveTime) return AliveTime;
+        //    else return 0;
+        //}
+
+        get => type switch
         {
-            if(type == CharacterStatusType.Attack) return Attack;
-            else if (type == CharacterStatusType.Defense) return Defense;
-            else if (type == CharacterStatusType.MoveSpeed) return MoveSpeed;
-            else if (type == CharacterStatusType.HP) return HP;
-            else if (type == CharacterStatusType.MaxHP) return MaxHP;
-            else if (type == CharacterStatusType.XP) return XP;
-            else if (type == CharacterStatusType.MaxXP) return MaxXP;
-            else if (type == CharacterStatusType.PickUpRange) return PickUpRange;
-            else if (type == CharacterStatusType.AliveTime) return AliveTime;
-            else return 0;
-        }
+            CharacterStatusType.Attack => Attack,
+            CharacterStatusType.Defense => Defense,
+            CharacterStatusType.MoveSpeed => MoveSpeed,
+            CharacterStatusType.HP => HP,
+            CharacterStatusType.MaxHP => MaxHP,
+            CharacterStatusType.XP => XP,
+            CharacterStatusType.MaxXP => MaxXP,
+            CharacterStatusType.PickUpRange => PickUpRange,
+            CharacterStatusType.AliveTime => AliveTime,
+            _ => 0,
+        };
+
+        //set 
+        //{
+        //    if(type == CharacterStatusType.Attack) Attack = value;
+        //    else if (type == CharacterStatusType.Defense) Defense = value;
+        //    else if (type == CharacterStatusType.MoveSpeed) MoveSpeed = value;
+        //    else if (type == CharacterStatusType.HP) HP = value;
+        //    else if (type == CharacterStatusType.MaxHP) MaxHP = value;
+        //    else if (type == CharacterStatusType.XP) XP = value;
+        //    else if (type == CharacterStatusType.MaxXP) MaxXP = value;
+        //    else if (type == CharacterStatusType.PickUpRange) PickUpRange = value;
+        //    else if (type == CharacterStatusType.AliveTime) AliveTime = value;
+        //}
 
         set
         {
-            if(type == CharacterStatusType.Attack) Attack = value;
-            else if (type == CharacterStatusType.Defense) Defense = value;
-            else if (type == CharacterStatusType.MoveSpeed) MoveSpeed = value;
-            else if (type == CharacterStatusType.HP) HP = value;
-            else if (type == CharacterStatusType.MaxHP) MaxHP = value;
-            else if (type == CharacterStatusType.XP) XP = value;
-            else if (type == CharacterStatusType.MaxXP) MaxXP = value;
-            else if (type == CharacterStatusType.PickUpRange) PickUpRange = value;
-            else if (type == CharacterStatusType.AliveTime) AliveTime = value;
+            switch(type)
+            {
+                case CharacterStatusType.Attack:
+                    Attack = value;
+                    break;
+                case CharacterStatusType.Defense:
+                    Defense = value;
+                    break;
+                case CharacterStatusType.MoveSpeed:
+                    MoveSpeed = value;
+                    break;
+                case CharacterStatusType.HP:
+                    HP = value;
+                    break;
+                case CharacterStatusType.MaxHP:
+                    MaxHP = value;
+                    break;
+                case CharacterStatusType.XP:
+                    XP = value;
+                    break;
+                case CharacterStatusType.MaxXP:
+                    MaxXP = value;
+                    break;
+                case CharacterStatusType.PickUpRange:
+                    PickUpRange = value;
+                    break;
+                case CharacterStatusType.AliveTime:
+                    AliveTime = value;
+                    break;
+            }
         }
     }
 

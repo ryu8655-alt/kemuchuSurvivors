@@ -17,6 +17,7 @@ public enum CharacterStatusType
     XP,
     MaxXP,
     PickUpRange,
+    AliveTime,
 }
 
 
@@ -50,6 +51,8 @@ public class BaseCharacterStatus
     public float MoveSpeed;
     //取得範囲
     public float PickUpRange;
+    //フィールドにいる時間(数秒経過すると自動消滅する敵用)
+    public float AliveTime;
 
     //CaharacterStatusTypeとの紐づけを行う
     //紐づけにはインデクサを使用する
@@ -65,6 +68,7 @@ public class BaseCharacterStatus
             else if (type == CharacterStatusType.XP) return XP;
             else if (type == CharacterStatusType.MaxXP) return MaxXP;
             else if (type == CharacterStatusType.PickUpRange) return PickUpRange;
+            else if (type == CharacterStatusType.AliveTime) return AliveTime;
             else return 0;
         }
 
@@ -78,6 +82,7 @@ public class BaseCharacterStatus
             else if (type == CharacterStatusType.XP) XP = value;
             else if (type == CharacterStatusType.MaxXP) MaxXP = value;
             else if (type == CharacterStatusType.PickUpRange) PickUpRange = value;
+            else if (type == CharacterStatusType.AliveTime) AliveTime = value;
         }
     }
 

@@ -16,6 +16,7 @@ public class GameSceneManager : MonoBehaviour
     public Vector2 _worldStart;
     public Vector2 _worldEnd;
 
+    public PlayerController _playerController;
 
     // Start is called before the first frame update
     void Start()

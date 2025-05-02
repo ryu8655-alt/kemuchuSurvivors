@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3380452e4a998944383a23d1142a0987, type: 3}
+  m_Name: CharacterSettings
+  m_EditorClassIdentifier: 
+  _characterStatusList:
+  - Title: TestEnemy
+    Id: 100
+    Level: 1
+    Name: TestEnemy
+    Description: "\u30C6\u30B9\u30C8\u7528\u306E\u30B5\u30FC\u30AF\u30EB\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8\u3092\u4F7F\u7528\u3057\u305FEnemy\u3067\u3059\n\u30D7\u30EC\u30A4\u30E4\u30FC\u306B\u5411\u304B\u3063\u3066\u7E70\u308C\u3070\u6210\u529F\t"
+    Attack: 5
+    Defense: 5
+    HP: 10
+    MaxHP: 10
+    XP: 1
+    MaxXP: 1
+    MoveSpeed: 2
+    PickUpRange: 0
+    AliveTime: -1
+    _characterPrefab: {fileID: 0}
+    _defaultWeaponIds: 
+    _usableWeaponIds: 
+    _usableWeaponMax: 0
+    _moveType: 0

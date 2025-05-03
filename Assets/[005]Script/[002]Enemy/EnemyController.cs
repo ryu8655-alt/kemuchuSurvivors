@@ -1,4 +1,5 @@
 using DG.Tweening;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
@@ -167,18 +168,64 @@ public class EnemyController : MonoBehaviour
     //衝突次判定
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
+        AttackPlayer(collision);
     }
 
     //衝突判定
     private void OnTriggerStay2D(Collider2D collision)
     {
-
+        AttackPlayer(collision);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
 
+    }
+
+    /// <summary>
+    /// プレイヤーとの衝突判定を行い、攻撃処理を行う
+    /// プレイヤーへ攻撃を行うには、PlayerのDamageメソッドを呼び出す
+    /// </summary>
+    /// <param name="collision"></param>
+    private void AttackPlayer(Collider2D collision)
+    {
+        //判定対象の確認
+        if (collision.gameObject.TryGetComponent<PlayerController>(out var player)) return;
+        //タイマー未消化なら処理を抜ける
+        if (0 < _attackCooldownTimer) return;
+        //死亡していたら処理を抜ける
+        if (State.Dead == _state) return;
+
+        player.Damage(_characterStatus.Attack);
+        //クールダウンタイマーの初期化
+        _attackCooldownTimer = _attackCooldownMax;
+    }
+
+    /// <summary>
+    /// 攻撃を受けた時の処理
+    /// 
+    /// </summary>
+    /// <param name="attack"></param>
+    public float Damage(float attack)
+    {
+        //自身が死亡している時は処理を抜ける
+        if (State.Dead == _state) return 0;
+
+        //ライフの減少処理
+        float damage = Mathf.Max(0 , attack - _characterStatus.Defense);
+        _characterStatus.HP -= damage;
+
+        //ダメージ数値をテキストで表示する
+        _gameSceneManager.DispDamage(gameObject, damage);
+
+        //TODO　消滅
+        if ( 0 > _characterStatus.HP)
+        {
+            SetDead();
+        }
+
+        //計算後のダメージを返す
+        return damage;
     }
 
 

@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Diagnostics;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class GameSceneManager : MonoBehaviour
 {
@@ -10,17 +12,34 @@ public class GameSceneManager : MonoBehaviour
     private GameObject _gridMap;
     [SerializeField, Header("マップ上の障害物")]
     private Tilemap _timemapCollider;//のちほどScene内に配置を行う予定
+
     //マップ全体座標
     public Vector2 _tileMapStart;
     public Vector2 _tileMapEnd;
     public Vector2 _worldStart;
     public Vector2 _worldEnd;
 
+    [SerializeField, Header("プレイヤー")]
     public PlayerController _playerController;
+
+    [SerializeField, Header("Transform - TextDamage")]
+    private Transform _parentTextDamage;
+
+    [SerializeField, Header("Prefab-TextDamage ")]
+    private GameObject _prefabTextDamage;
+
+    //タイマー
+    [SerializeField, Header("TextTimer")]
+    private Text _textTimer;
+    public float _gameTimer;
+    public float _oldSeconds;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        //初期設定
+        _oldSeconds = -1;
 
         //カメラの移動ができる範囲を設定する
         foreach (Transform item in _gridMap.GetComponentInChildren<Transform>())
@@ -58,6 +77,27 @@ public class GameSceneManager : MonoBehaviour
         // Update is called once per frame
         void Update()
     {
+        //ゲーム中のタイマーを更新する
+       // UpdateGameTimer();
+    }
+
+    public void DispDamage(GameObject target , float damage)
+    {
+        GameObject obj = Instantiate(_prefabTextDamage, _parentTextDamage);
+        obj.GetComponent<TextDamageController>().Init(target, damage);
+    }
+
+
+
+    private void UpdateGameTimer()
+    {
+        _gameTimer += Time.deltaTime;
+
+        //秒数の変化があるかを確認
+        int seconds = (int)_gameTimer % 60;
+        if (seconds == _oldSeconds) return;
         
+        _textTimer.text = Utils.GetTextTimer(_gameTimer);
+        _oldSeconds = seconds;
     }
 }

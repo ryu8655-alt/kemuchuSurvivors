@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 /// <summary>
 /// プレイヤーの動き
 /// 移動
@@ -34,6 +36,22 @@ public class PlayerController : MonoBehaviour
     //private Animator _animator;   //後でStart内で取得の処理を入れる
     GameSceneManager _gameManager;
 
+    //あとでInitに移動する変数達
+    [SerializeField,Header("GameSceneManager")]
+    private GameSceneManager _gameSceneManager;
+
+    [SerializeField,Header("SliderXP")]
+    private Slider _sliderXP;
+
+    [SerializeField, Header("SliderHP")]
+    private Slider _sliderHP;
+
+    public CharacterStatus _characterStatus;
+
+    //攻撃クールダウン変数
+    private float _attackCooldownTimer;//クールダウン計測用変数
+    private float _attackCooldownMax = 0.5f;//クールダウンの上限値
+
 
 
     // Start is called before the first frame update
@@ -59,6 +77,9 @@ public class PlayerController : MonoBehaviour
         
         //プレイヤーの移動処理
         MovePlayer();
+
+        //HPスライダーの移動処理
+        MoveSliderHP();
     }
 
 
@@ -119,5 +140,91 @@ public class PlayerController : MonoBehaviour
         pos.x = Mathf.Clamp(pos.x, _gameManager._worldStart.x, _gameManager._worldEnd.x);
         pos.y = Mathf.Clamp(pos.y, _gameManager._worldStart.y, _gameManager._worldEnd.y);
         _rigidbody2d.position = pos;
+    }
+
+    /// <summary>
+    /// Canvas上のHPスライダー画プレイヤーを追従する処理
+    /// 
+    private void MoveSliderHP()
+    {
+        Vector3 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position);
+        pos.y -= 125;
+        _sliderHP.transform.position = pos;
+    }
+
+
+     public void Damage(float attack)
+    {
+        //非アクティブ状態の時はダメージを受けない
+        if (!enabled) return;
+
+        float damage = Mathf.Max(0, attack - _characterStatus.Defense);
+        _characterStatus.HP -= damage;
+
+        //TODO　ゲームオーバー処理を追加する
+        if ( 0 > _characterStatus.HP)
+        {
+         
+        }
+
+        if(0 > _characterStatus.HP) _characterStatus.HP = 0;
+
+        steSliderHP();
+    }
+
+
+    /// <summary>
+    /// HPスライダーの初期化処理と更新を行う
+    /// </summary>
+    private void steSliderHP()
+    {
+        _sliderHP.maxValue = _characterStatus.MaxHP;
+        _sliderHP.value = _characterStatus.HP;
+
+    }
+
+    private void SliderXP()
+    {
+        _sliderXP.maxValue = _characterStatus.MaxXP;
+        _sliderXP.value = _characterStatus.XP;
+    }
+
+ 
+    //衝突した時の処理
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+    }
+
+    //衝突中の処理
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+
+    }
+
+    //衝突が終わった時の処理
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+    }
+
+    private void AttackEnemy(Collision2D collision)
+    {
+        //対象がエネミーじゃないとき
+        if (!collision.gameObject.TryGetComponent<EnemyController>(out var enemy)) return;
+        //タイマーが未消化の時は処理を抜ける
+        if (0 < _attackCooldownTimer) return;
+
+        //後でEnemyControllerにダメージ処理を追加する
+        enemy.Damage(_characterStatus.Attack);
+        //攻撃クールダウンタイマーの初期化
+        _attackCooldownTimer = _attackCooldownMax;
+    }
+
+    private void UpdateTimer()
+    {
+        if(0 < _attackCooldownTimer)
+        {
+            _attackCooldownTimer -= Time.deltaTime;
+        }
     }
 }

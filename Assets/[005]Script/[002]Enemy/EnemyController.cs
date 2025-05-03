@@ -37,7 +37,7 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        init(this._gameSceneManager, CharacterSettings.Instance.Get(100));
+        Init(this._gameSceneManager, CharacterSettings.Instance.Get(100));
     }
 
     // Update is called once per frame
@@ -52,7 +52,7 @@ public class EnemyController : MonoBehaviour
 /// </summary>
 /// <param name="sceneManager"></param>
 /// <param name="characterStatus"></param>
-    public void init(GameSceneManager sceneManager, CharacterStatus characterStatus)
+    public void Init(GameSceneManager sceneManager, CharacterStatus characterStatus)
     {
         this._gameSceneManager = sceneManager;
         this._characterStatus = characterStatus;
@@ -166,21 +166,18 @@ public class EnemyController : MonoBehaviour
     }
 
     //衝突次判定
-    private void OnTriggerEnter2D(Collider2D collision)
+   private void OnCollisionEnter2D(Collision2D collision)
     {
-        AttackPlayer(collision);
+        AttackPlayer(collision.collider);
     }
 
     //衝突判定
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
-        AttackPlayer(collision);
+        AttackPlayer(collision.collider);
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-
-    }
+ 
 
     /// <summary>
     /// プレイヤーとの衝突判定を行い、攻撃処理を行う
@@ -190,7 +187,7 @@ public class EnemyController : MonoBehaviour
     private void AttackPlayer(Collider2D collision)
     {
         //判定対象の確認
-        if (collision.gameObject.TryGetComponent<PlayerController>(out var player)) return;
+        if (!collision.gameObject.TryGetComponent<PlayerController>(out var player)) return;
         //タイマー未消化なら処理を抜ける
         if (0 < _attackCooldownTimer) return;
         //死亡していたら処理を抜ける
@@ -214,6 +211,7 @@ public class EnemyController : MonoBehaviour
         //ライフの減少処理
         float damage = Mathf.Max(0 , attack - _characterStatus.Defense);
         _characterStatus.HP -= damage;
+        Debug.Log($"Enemy Damaged: {damage}");
 
         //ダメージ数値をテキストで表示する
         _gameSceneManager.DispDamage(gameObject, damage);

@@ -35,8 +35,8 @@ public class TextDamageController : MonoBehaviour
             .OnComplete(() =>
             {
                 //テキストが小さくなって消える演出
-                transform.DOScale(new Vector2(0, 0), _dispTextTime / 2).SetRelative()
-                    .OnComplete(() => Destroy(gameObject));
+                transform.DOScale(new Vector2(0, 0), _dispTextTime / 2)
+                    .OnComplete(() => Destroy(this.gameObject));
             });
     }
 
@@ -61,6 +61,11 @@ public class TextDamageController : MonoBehaviour
         TextMeshProUGUI text = GetComponent<TextMeshProUGUI>();
 
         text.text = ""+ (int)damage;
+
+        if (_target.GetComponent<PlayerController>())
+        {
+            text.color = Color.red;
+        }
 
     }
 }

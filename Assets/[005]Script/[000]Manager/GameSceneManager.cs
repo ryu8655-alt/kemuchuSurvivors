@@ -78,7 +78,7 @@ public class GameSceneManager : MonoBehaviour
         void Update()
     {
         //ゲーム中のタイマーを更新する
-       // UpdateGameTimer();
+       UpdateGameTimer();
     }
 
     public void DispDamage(GameObject target , float damage)

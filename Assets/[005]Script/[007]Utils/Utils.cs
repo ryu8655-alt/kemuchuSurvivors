@@ -9,6 +9,12 @@ using UnityEngine.Tilemaps;
 
 public class Utils : MonoBehaviour
 {
+
+    /// <summary>
+    /// Œo‰ßŠÔ‚ğ0:00‚ÌŒ`®‚Å•¶š‚É•ÏŠ·‚ğs‚¤
+    /// </summary>
+    /// <param name="timer"></param>
+    /// <returns></returns>
     public static string GetTextTimer(float timer)
     {
         int seconds = (int)timer % 60;

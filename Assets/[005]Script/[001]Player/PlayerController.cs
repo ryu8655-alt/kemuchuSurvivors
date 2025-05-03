@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     //各種コンポーネント取得用変数
     private Rigidbody2D _rigidbody2d;
     //private Animator _animator;   //後でStart内で取得の処理を入れる
-    GameSceneManager _gameManager;
+    //GameSceneManager _gameManager;
 
     //あとでInitに移動する変数達
     [SerializeField,Header("GameSceneManager")]
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this._gameManager = GameObject.Find("GameSceneManager").GetComponent<GameSceneManager>();
+        //this._gameManager = GameObject.Find("GameSceneManager").GetComponent<GameSceneManager>();
 
 
         //Rigidbody2Dの取得
@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         GetInput();
+        UpdateTimer();
 
     }
 
@@ -80,6 +81,8 @@ public class PlayerController : MonoBehaviour
 
         //HPスライダーの移動処理
         MoveSliderHP();
+
+        
     }
 
 
@@ -137,8 +140,8 @@ public class PlayerController : MonoBehaviour
     private void  ClampToMoveBounds(Vector3 position)
     {
         Vector2 pos = _rigidbody2d.position;
-        pos.x = Mathf.Clamp(pos.x, _gameManager._worldStart.x, _gameManager._worldEnd.x);
-        pos.y = Mathf.Clamp(pos.y, _gameManager._worldStart.y, _gameManager._worldEnd.y);
+        pos.x = Mathf.Clamp(pos.x, _gameSceneManager._worldStart.x, _gameSceneManager._worldEnd.x);
+        pos.y = Mathf.Clamp(pos.y, _gameSceneManager._worldStart.y, _gameSceneManager._worldEnd.y);
         _rigidbody2d.position = pos;
     }
 
@@ -161,6 +164,10 @@ public class PlayerController : MonoBehaviour
         float damage = Mathf.Max(0, attack - _characterStatus.Defense);
         _characterStatus.HP -= damage;
 
+        Debug.Log($"Player Damaged: {damage}");
+        //ダメージ表示
+        _gameSceneManager.DispDamage(gameObject, damage);
+
         //TODO　ゲームオーバー処理を追加する
         if ( 0 > _characterStatus.HP)
         {
@@ -169,14 +176,14 @@ public class PlayerController : MonoBehaviour
 
         if(0 > _characterStatus.HP) _characterStatus.HP = 0;
 
-        steSliderHP();
+        SetSliderHP();
     }
 
 
     /// <summary>
     /// HPスライダーの初期化処理と更新を行う
     /// </summary>
-    private void steSliderHP()
+    private void SetSliderHP()
     {
         _sliderHP.maxValue = _characterStatus.MaxHP;
         _sliderHP.value = _characterStatus.HP;
@@ -193,13 +200,13 @@ public class PlayerController : MonoBehaviour
     //衝突した時の処理
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        AttackEnemy(collision);
     }
 
     //衝突中の処理
     private void OnCollisionStay2D(Collision2D collision)
     {
-
+        AttackEnemy(collision);
     }
 
     //衝突が終わった時の処理

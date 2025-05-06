@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: CharacterSettings
   m_EditorClassIdentifier: 
   _characterStatusList:
-  - Title: TestEnemy
+  - Title: "\u9CE5"
     Id: 100
-    Level: 1
-    Name: TestEnemy
-    Description: "\u30C6\u30B9\u30C8\u7528\u306E\u30B5\u30FC\u30AF\u30EB\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8\u3092\u4F7F\u7528\u3057\u305FEnemy\u3067\u3059\n\u30D7\u30EC\u30A4\u30E4\u30FC\u306B\u5411\u304B\u3063\u3066\u7E70\u308C\u3070\u6210\u529F\t"
+    Level: 0
+    Name: "\u9CE5"
+    Description: "\u30C6\u30B9\u30C8\u7528\u306E"
     Attack: 5
     Defense: 5
     HP: 10

@@ -13,6 +13,15 @@ public class EnemyController : MonoBehaviour
 
     public CharacterStatus _characterStatus;
 
+
+    [Header("スプライトの向き設定")]
+    [Tooltip("このスプライトのデフォルト向きを設定します。\n" +
+         "ON（チェックあり）：右向きがデフォルトのスプライト\n" +
+         "OFF（チェックなし）：左向きがデフォルトのスプライト\n" +
+         "進行方向に応じて左右反転処理が正しく行われるようになります。")]
+    [SerializeField]
+    private bool _isFacingRightDefault = false;
+
     [SerializeField,Header("GameSceneManager")]
     private GameSceneManager _gameSceneManager;
     
@@ -59,7 +68,7 @@ public class EnemyController : MonoBehaviour
 
         _rigidbody2d = GetComponent<Rigidbody2D>();
 
-        AnimateSpawn();
+        //AnimateSpawn();
         SetInitalizeDirection();
 
         _state = State.Alive;
@@ -118,6 +127,18 @@ public class EnemyController : MonoBehaviour
 
         //移動
         _rigidbody2d.position += _forward.normalized * _characterStatus.MoveSpeed * Time.deltaTime;
+
+
+        //移動方向を取得して常に移動方向を向くようにする
+        if(_forward.x  != 0)
+        {
+            Vector3 scale = transform.localScale;
+            float direction = Mathf.Sign(_forward.x) *(_isFacingRightDefault ? 1:-1);
+            scale.x = direction * Mathf.Abs(scale.x);//移動方向に応じてスプライトの向きを変更
+            transform.localScale = scale;
+        }
+
+
     }
 
     /// <summary>

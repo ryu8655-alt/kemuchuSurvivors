@@ -1,146 +1,226 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using System.Runtime.CompilerServices;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Rnadom = UnityEngine.Random;
+using Random = UnityEngine.Random;
 
-public enum SpawnTyep
+//エネミースポーンパターンの種類
+public enum SpawnPattern
 {
-    Normal,
+    Normmal,
     Group,
 }
 
-[System.Serializable]
+
+//エネミースポーン設定データ
+[Serializable]
 public class EnemySpawnData
 {
-    //インスペクター上での説明用
-    public string Title;
+    //インスペクター上ででのタイトル
+    public string _title;
 
+    //出現経過時間
     [Header("出現経過時間")]
-    public float ElapsedMinutes;
-    public int ElapsedSeconds;
+    public int _elapsedMinutes;
+    public int _elapsedSeconds;
 
-    [Header("出現パターン")]
-    public SpawnTyep SpawnType;
+    [Header("スポーンパターン")]
+    public SpawnPattern _spawnPattern;
 
-    [Header("生成時間")]
-    public float SpawnDuration;
-    [Header("最大生成数")]
-    public int _spawnCountMax;
-    [Header("生成する敵のID")]
-    public List<int> EnemyIDs;
+    [Header("スポーン時間")]
+    public float _spawnDuration;
+
+    [Header("最大スポーン数")]
+    public int _spawncountMax;
+
+    [Header("スポーンをさせるエネミーデータID")]
+    public List<int> _enemyIds;
+
 }
-
-
-
 
 public class EnemySpawnerController : MonoBehaviour
 {
-    //敵のデータ
-    [SerializeField,Header("敵のデータ")]
-    private List<EnemySpawnData> _enemySpawnDataList;
-
-    //生成をした敵のリスト
+    //敵データ
+    [SerializeField]
+    private List<EnemySpawnData> _enemySpawnDatas;
+    //スポーンされた敵
     List<EnemyController> enemies;
 
+    //ゲームシーンマネージャー
     GameSceneManager _gameSceneManager;
     //当たり判定のあるタイルマップ
-    Tilemap tilemapCollider;
-    //現在の参照データ
+    Tilemap _tilemapCollider;
     EnemySpawnData _enemySpawnData;
-
     //経過時間
     float _oldSeconds;
     float _spawnTimer;
-    //現在のデータ位置
-    int _spawnDataIndex;
-    //敵の生成位置(生成パターンGropにて使用予定)
-    const float SpawnRadius = 13;
+
+    //現在のデータ参照位置
+    private int _spawnDataIndex;
+    //敵のスポーン位置
+    const float _spawnRadius = 13;
 
 
-
-    // Start is called before the first frame update
-    void Start()
+    //初期化処理
+    public　void Init(GameSceneManager gameSceneManager, Tilemap tilemapCollider)
     {
-        
-    }
+        this._gameSceneManager = gameSceneManager;
+        this._tilemapCollider = tilemapCollider;
 
-    // Update is called once per frame
-    void Update()
-    {
-        //適生成データを更新
-       
-        //敵のスポーン処理
-    }
-
-    public void Init(GameSceneManager sceneManager , Tilemap timemapCollider)
-    {
-        this._gameSceneManager = sceneManager;
-        this.tilemapCollider = timemapCollider;
-
-
-        //リストの初期化
+        //生成した敵データを格納するリストを初期化する
         enemies = new List<EnemyController>();
+        //参照データの位置を初期化する
         _spawnDataIndex = -1;
     }
 
-    private void SpawnEnemy()
+    private void Update()
     {
-        if (null == _enemySpawnData) return;
+        //敵生成データの更新
+        UpdateEnemySpawnData();
 
-        //タイマーの消化
+        //スポーン処理
+        EnemySpawn();
+    }
+
+
+    /// <summary>
+    /// 敵のスポーン処理をEnemySpaenData内のSpawnPatternに従って行う
+    /// </summary>
+    private void EnemySpawn()
+    {
+        if (_enemySpawnData == null) return;
+
+        //タイマーの消化処理
         _spawnTimer -= Time.deltaTime;
-        if (0 < _spawnTimer) return;
+        if(_spawnTimer > 0) return;
 
-        if (SpawnTyep.Group == _enemySpawnData.SpawnType)
+        //SpawnPatternの種類に従ってそれぞれのスポーン処理を実行する
+        if (SpawnPattern.Normmal == _enemySpawnData._spawnPattern)
         {
-            SpawnGroup();
-        }else if(SpawnTyep.Normal ==_enemySpawnData.SpawnType){
-
-            SpawnNormal();
+            NormalSpawn();
+        }
+        else if (SpawnPattern.Group == _enemySpawnData._spawnPattern)
+        {
+            GroupSpawn();
         }
 
-        _spawnTimer= _enemySpawnData.SpawnDuration;
+        _spawnTimer = _enemySpawnData._spawnDuration;
 
     }
 
-    private void SpawnNormal()
+
+
+    private void CreateRandomEnemy(Vector3 position)
     {
-        //プレイヤーの位置を取得し、スポーン範囲の中心として設定
+        //データ内からランダムなIDを取得する
+        int rnd = Random.Range(0, _enemySpawnData._enemyIds.Count);
+        int id = _enemySpawnData._enemyIds[rnd];
+
+        //敵生成
+        EnemyController enemy = CharacterSettings.Instance.CretaeEnemy(id , _gameSceneManager, position);
+        enemies.Add(enemy);
+    }
+
+    /// <summary>
+    /// SpawnPattern.Normmalのスポーン処理
+    /// </summary>
+    private void NormalSpawn()
+    {
+        //プレイヤーの位置を中心点として取得する
         Vector3 center = _gameSceneManager._playerController.transform.position;
 
-    
-
-        //敵を生成する
-        for (int i = 0; i < _enemySpawnData._spawnCountMax; ++i)
+        //敵の生成処理
+        for(int i = 0; i < _enemySpawnData._spawncountMax; ++i)
         {
-                  
-            //プレイヤーの周囲から敵を出現させる
-            float angle = Random.Range(0, 360);
+            //プレイヤーの周りから出現する
+            float angle = 360 / _enemySpawnData._spawncountMax * i;
             // Cos関数にラジアン角を指定すると、xの座標を返してくれる、radiusをかけてワールド座標に変換する
-            float x = Mathf.Cos(angle * Mathf.Deg2Rad) * SpawnRadius;
+            float x = Mathf.Cos(angle * Mathf.Deg2Rad) * _spawnRadius;
             // Sin関数にラジアン角を指定すると、yの座標を返してくれる、radiusをかけてワールド座標に変換する
-            float y = Mathf.Sin(angle * Mathf.Deg2Rad) * SpawnRadius;
+            float y = Mathf.Sin(angle * Mathf.Deg2Rad) * _spawnRadius;
 
-            //生成位置の決定
-            Vector2 pos = center + new Vector3(x,y,0);
+            //スポーン位置を計算する
+            Vector2 pos = center + new Vector3(x, y, 0);
 
-            //当たり判定のあるタイルマップの上に生成されないようにする
-            if (Utils.IsColliderTile(tilemapCollider, pos)) continue;
+            //計算したスポーン位置に当たり判定のあるタイルマップが存在する場合は生成を行わない
+            if (Utils.IsColliderTile(_tilemapCollider, pos)) continue;
 
-            //生成
+            //敵のスポーン処理
+            CreateRandomEnemy(pos);
+
+        }
+    }
+
+    private void GroupSpawn()
+    {
+        //プレイヤーの位置を中心点として取得をする
+        Vector3 center = _gameSceneManager._playerController.transform.position;
+
+        //敵をプレイヤーの周りから出現させる
+        float angle = Random.Range(0, 360);
+        // Cos関数にラジアン角を指定すると、xの座標を返してくれる、radiusをかけてワールド座標に変換する
+        float x = Mathf.Cos(angle * Mathf.Deg2Rad) * _spawnRadius;
+        // Sin関数にラジアン角を指定すると、yの座標を返してくれる、radiusをかけてワールド座標に変換する
+        float y = Mathf.Sin(angle * Mathf.Deg2Rad) * _spawnRadius;
+
+        //スポーン位置の計算
+        center += new Vector3(x, y, 0);
+        float radius = 0.5f;
+
+        //敵スポーン処理
+        for (int i = 0; i < _enemySpawnData._spawncountMax; i++)
+        {
+            //プレイヤーの周りから出現するようにする
+            angle = 360 / _enemySpawnData._spawncountMax * i;
+            // Cos関数にラジアン角を指定すると、xの座標を返してくれる、radiusをかけてワールド座標に変換する
+            x = Mathf.Cos(angle * Mathf.Deg2Rad) * radius;
+            // Sin関数にラジアン角を指定すると、yの座標を返してくれる、radiusをかけてワールド座標に変換する
+            y = Mathf.Sin(angle * Mathf.Deg2Rad) * radius;
+
+            //生成位置
+            Vector2 pos = center + new Vector3(x, y, 0);
+            //当たり判定のあるタイルマップが存在する場合は生成を行わない
+            if (Utils.IsColliderTile(_tilemapCollider, pos)) continue;
+
+            //敵のスポーン処理
             CreateRandomEnemy(pos);
         }
     }
 
-    private void SpawnGroup()
-    {
 
+    private void UpdateEnemySpawnData()
+    {
+        //経過秒数に違いがないときは処理を抜ける
+        if (_oldSeconds == _gameSceneManager._gameTimer) return;
+
+        //１つ先のデータを参照する
+        int idx = _spawnDataIndex + 1;
+
+        //デー丹生最後に来たときは処理を抜ける
+        if (_enemySpawnDatas.Count - 1 < idx) return;
+
+        //設定された経過時間を超えていた場合はデータの入れ替えを行う
+        EnemySpawnData data = _enemySpawnDatas[idx];
+        int elapsedSeconds = data._elapsedMinutes * 60 + data._elapsedSeconds;
+
+        if(elapsedSeconds < _gameSceneManager._gameTimer)
+        {
+            _enemySpawnData = _enemySpawnDatas[idx];
+
+            //次回用の設定
+            _spawnDataIndex = idx;
+            _spawnTimer = 0;
+            _oldSeconds = _gameSceneManager._gameTimer;
+        }
     }
 
-    private void CreateRandomEnemy(Vector3 pos)
+    public List<EnemyController> GetEnemies()
     {
-
+        enemies.RemoveAll(item => !item);
+        return enemies;
     }
+
 }

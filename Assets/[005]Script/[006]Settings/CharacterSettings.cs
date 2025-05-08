@@ -50,6 +50,26 @@ public class CharacterSettings : ScriptableObject
 
         // return (CharacterStatus)_characterStatusList.Find(item => item.Id == id).GetCopy();
     }
+
+
+    public EnemyController CretaeEnemy(int id , GameSceneManager gameSceneManager, Vector3 position)
+    {
+        //指定したIDのキャラクターステータスを取得する
+        CharacterStatus characterStatus = Instance.Get(id);
+        //対象のキャラクタープレハブを取得する
+        GameObject obj = Instantiate(characterStatus._characterPrefab, position, Quaternion.identity);
+
+        //データセット
+        EnemyController　enemyController = obj.GetComponent<EnemyController>();
+        enemyController.Init(gameSceneManager, characterStatus);
+
+        return enemyController;
+    }
+
+
+
+
+
 }
 
 
@@ -100,3 +120,4 @@ public class CharacterStatus : BaseCharacterStatus
 
     //アイテムを追加する処理を後で追加する
 }
+

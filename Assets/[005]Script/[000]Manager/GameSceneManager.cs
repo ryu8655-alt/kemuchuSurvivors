@@ -34,12 +34,17 @@ public class GameSceneManager : MonoBehaviour
     public float _gameTimer;
     public float _oldSeconds;
 
+    //エネミースポナー
+    [SerializeField, Header("EnemySpawner")]
+    private EnemySpawnerController _enemySpawnerController;
+
 
     // Start is called before the first frame update
     void Start()
     {
         //初期設定
         _oldSeconds = -1;
+        _enemySpawnerController.Init(this, _timemapCollider);
 
         //カメラの移動ができる範囲を設定する
         foreach (Transform item in _gridMap.GetComponentInChildren<Transform>())

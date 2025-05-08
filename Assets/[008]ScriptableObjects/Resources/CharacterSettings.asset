@@ -19,15 +19,167 @@ MonoBehaviour:
     Name: "\u9CE5"
     Description: "\u30C6\u30B9\u30C8\u7528\u306E"
     Attack: 5
-    Defense: 5
+    Defense: 0
     HP: 10
     MaxHP: 10
-    XP: 1
+    XP: 0.1
+    MaxXP: 0.5
+    MoveSpeed: 0.5
+    PickUpRange: 0
+    AliveTime: 0
+    _characterPrefab: {fileID: 7723477649736266297, guid: 8a6ee01ac81d8604faa16f2807263a14, type: 3}
+    _defaultWeaponIds: 
+    _usableWeaponIds: 
+    _usableWeaponMax: 0
+    _moveType: 1
+  - Title: "\u30B9\u30E9\u30A4\u30E0"
+    Id: 101
+    Level: 0
+    Name: "\u30B9\u30E9\u30A4\u30E0"
+    Description: 
+    Attack: 10
+    Defense: 0
+    HP: 29
+    MaxHP: 0
+    XP: 0.5
     MaxXP: 1
-    MoveSpeed: 2
+    MoveSpeed: 0.15
+    PickUpRange: 0
+    AliveTime: 0
+    _characterPrefab: {fileID: 8403088251109601667, guid: 9a5d155654e78c448b1ad89820337328, type: 3}
+    _defaultWeaponIds: 
+    _usableWeaponIds: 
+    _usableWeaponMax: 0
+    _moveType: 1
+  - Title: "\u30B3\u30DC\u30EB\u30C9"
+    Id: 102
+    Level: 0
+    Name: "\u30B3\u30DC\u30EB\u30C9"
+    Description: 
+    Attack: 15
+    Defense: 0
+    HP: 50
+    MaxHP: 0
+    XP: 1
+    MaxXP: 2
+    MoveSpeed: 0.2
+    PickUpRange: 0
+    AliveTime: 0
+    _characterPrefab: {fileID: 4602484010967169051, guid: 817f7f76795a7994d9aebc1388862e8c, type: 3}
+    _defaultWeaponIds: 
+    _usableWeaponIds: 
+    _usableWeaponMax: 0
+    _moveType: 1
+  - Title: "\u30BE\u30F3\u30D3"
+    Id: 103
+    Level: 0
+    Name: "\u30BE\u30F3\u30D3"
+    Description: "\t"
+    Attack: 15
+    Defense: 0
+    HP: 60
+    MaxHP: 0
+    XP: 1.5
+    MaxXP: 2
+    MoveSpeed: 0.05
+    PickUpRange: 0
+    AliveTime: 0
+    _characterPrefab: {fileID: 7193022087178686318, guid: bcc6838a17782e641a975a07c9862e60, type: 3}
+    _defaultWeaponIds: 
+    _usableWeaponIds: 
+    _usableWeaponMax: 0
+    _moveType: 1
+  - Title: "\u30B9\u30B1\u30EB\u30C8\u30F3"
+    Id: 104
+    Level: 0
+    Name: "\u30B9\u30B1\u30EB\u30C8\u30F3"
+    Description: "\t"
+    Attack: 18
+    Defense: 0
+    HP: 80
+    MaxHP: 0
+    XP: 2
+    MaxXP: 3
+    MoveSpeed: 0.3
+    PickUpRange: 0
+    AliveTime: 0
+    _characterPrefab: {fileID: 4472172397890567516, guid: d88d11e3cac4704418d29c050b36e50c, type: 3}
+    _defaultWeaponIds: 
+    _usableWeaponIds: 
+    _usableWeaponMax: 0
+    _moveType: 1
+  - Title: "\u9A0E\u58EB"
+    Id: 105
+    Level: 0
+    Name: "\u9A0E\u58EB"
+    Description: "\t"
+    Attack: 20
+    Defense: 0
+    HP: 100
+    MaxHP: 0
+    XP: 3
+    MaxXP: 6
+    MoveSpeed: 0.35
+    PickUpRange: 0
+    AliveTime: 0
+    _characterPrefab: {fileID: 638641515427933452, guid: 55d265058711aa24185eab16d29ff8d3, type: 3}
+    _defaultWeaponIds: 
+    _usableWeaponIds: 
+    _usableWeaponMax: 0
+    _moveType: 1
+  - Title: "\u5927\u7FA4\u9CE5"
+    Id: 200
+    Level: 1
+    Name: "\u5927\u7FA4\u9CE5"
+    Description: "\t"
+    Attack: 15
+    Defense: 0
+    HP: 3
+    MaxHP: 0
+    XP: 0.1
+    MaxXP: 0.5
+    MoveSpeed: 4
+    PickUpRange: 0
+    AliveTime: 15
+    _characterPrefab: {fileID: 7723477649736266297, guid: 8a6ee01ac81d8604faa16f2807263a14, type: 3}
+    _defaultWeaponIds: 
+    _usableWeaponIds: 
+    _usableWeaponMax: 0
+    _moveType: 2
+  - Title: "\u5927\u7FA4\u30B9\u30E9\u30A4\u30E0"
+    Id: 201
+    Level: 1
+    Name: "\u5927\u7FA4\u30B9\u30E9\u30A4\u30E0"
+    Description: "\t"
+    Attack: 50
+    Defense: 0
+    HP: 500
+    MaxHP: 0
+    XP: 5
+    MaxXP: 10
+    MoveSpeed: 0.1
+    PickUpRange: 0
+    AliveTime: 90
+    _characterPrefab: {fileID: 8403088251109601667, guid: 9a5d155654e78c448b1ad89820337328, type: 3}
+    _defaultWeaponIds: 
+    _usableWeaponIds: 
+    _usableWeaponMax: 0
+    _moveType: 1
+  - Title: "\u30C9\u30E9\u30B4\u30F3"
+    Id: 500
+    Level: 1
+    Name: "\u30C9\u30E9\u30B4\u30F3"
+    Description: "\t"
+    Attack: 50
+    Defense: 0
+    HP: 5000
+    MaxHP: 0
+    XP: 20
+    MaxXP: 30
+    MoveSpeed: 0.15
     PickUpRange: 0
     AliveTime: -1
-    _characterPrefab: {fileID: 0}
+    _characterPrefab: {fileID: 1825006046208767479, guid: a026f03b102e41b4da16a444a7fb85d4, type: 3}
     _defaultWeaponIds: 
     _usableWeaponIds: 
     _usableWeaponMax: 0

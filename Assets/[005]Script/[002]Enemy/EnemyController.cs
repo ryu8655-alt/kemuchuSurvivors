@@ -46,7 +46,6 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Init(this._gameSceneManager, CharacterSettings.Instance.Get(100));
     }
 
     // Update is called once per frame

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// ゲームに登場する全キャラクターのステータス情報を管理するscriptableObject
@@ -66,6 +68,21 @@ public class CharacterSettings : ScriptableObject
         return enemyController;
     }
 
+    public PlayerController CreatePlayer(int id ,GameSceneManager gameSceneManager,EnemySpawnerController enemySpawner,
+                        TextMeshProUGUI textLv,Slider sliderHP,Slider sliderXP)
+    {
+        //ID指定されたキャラクターステータスの取得を行う
+        CharacterStatus status =  Instance.Get(id);
+        //オブジェクト生成
+        GameObject obj = Instantiate(status._characterPrefab, Vector3.zero, Quaternion.identity);
+
+
+        //データセット
+        PlayerController ctrl = obj.GetComponent<PlayerController>();
+        ctrl.Init(gameSceneManager,enemySpawner,status,textLv,sliderHP,sliderXP);
+
+        return ctrl;
+    }       
 
 
 

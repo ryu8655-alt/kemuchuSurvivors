@@ -199,7 +199,7 @@ public class EnemySpawnerController : MonoBehaviour
         //１つ先のデータを参照する
         int idx = _spawnDataIndex + 1;
 
-        //デー丹生最後に来たときは処理を抜ける
+        //最後に来たときは処理を抜ける
         if (_enemySpawnDatas.Count - 1 < idx) return;
 
         //設定された経過時間を超えていた場合はデータの入れ替えを行う

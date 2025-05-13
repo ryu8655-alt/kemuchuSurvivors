@@ -13,6 +13,25 @@ MonoBehaviour:
   m_Name: CharacterSettings
   m_EditorClassIdentifier: 
   _characterStatusList:
+  - Title: Player
+    Id: 0
+    Level: 1
+    Name: Player
+    Description: TestPlayer
+    Attack: 5
+    Defense: 1
+    HP: 100
+    MaxHP: 100
+    XP: 0
+    MaxXP: 10
+    MoveSpeed: 3
+    PickUpRange: 0.5
+    AliveTime: 0
+    _characterPrefab: {fileID: 1870053568670532232, guid: 1bbfb0b059fd3b044b3de0b9632a2193, type: 3}
+    _defaultWeaponIds: 00000000
+    _usableWeaponIds: 000000000100000002000000030000000400000005000000060000000700000008000000
+    _usableWeaponMax: 6
+    _moveType: 0
   - Title: "\u9CE5"
     Id: 100
     Level: 0

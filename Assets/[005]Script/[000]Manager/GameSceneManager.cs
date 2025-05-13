@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Diagnostics;
 using UnityEngine.Tilemaps;
@@ -38,10 +39,28 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField, Header("EnemySpawner")]
     private EnemySpawnerController _enemySpawnerController;
 
+    //プレイヤー生成
+    [SerializeField]
+    Slider _sliderHP;
+    [SerializeField]
+    Slider _sliderXP;
+    [SerializeField]
+    TextMeshProUGUI _textLv;
+
+
+
 
     // Start is called before the first frame update
     void Start()
     {
+        // InGameスタート時にPlayerの生成を行う
+        int playerId = 0;
+        _playerController = CharacterSettings.Instance.CreatePlayer(playerId, this, _enemySpawnerController,
+                                                                     _textLv, _sliderHP, _sliderXP);
+
+
+
+
         //初期設定
         _oldSeconds = -1;
         _enemySpawnerController.Init(this, _timemapCollider);

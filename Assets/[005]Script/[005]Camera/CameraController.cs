@@ -10,8 +10,6 @@ using UnityEngine.UIElements;
 
 public class CameraController : MonoBehaviour
 {
-    //プレイヤーを対象にとる
-    [SerializeField, Header("カメラが追従する対象")]
     private Transform _target;
 
     private GameSceneManager _gameManager;
@@ -33,6 +31,8 @@ public class CameraController : MonoBehaviour
         {
             Debug.LogError("[CameraController]GameSceneManagerが取得できませんでした");
         }
+
+        _target = _gameManager._playerController.transform;
 
     }
 

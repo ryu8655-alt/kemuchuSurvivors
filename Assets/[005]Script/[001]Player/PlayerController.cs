@@ -1,5 +1,7 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,13 +18,23 @@ using UnityEngine.UI;
 /// 　  ->この部分の実装はとりあえず後回し
 /// 　  
 /// 
+/// TODO！！！！！！！！！！！！！！
+/// 改修を行うにあたり現在の設計ではPlayerController内に
+/// UIであるPlayerのHP表記を行いPlayerに追従を行うSliderHP
+/// Playerの所持する現在の経験値を表記するSliderXP
+/// Playerの現在のレベルをテキストとして画面上に表記を行っている３項目が
+/// Playerに依存する必要がないため設計の見直しを行う
+/// →UI関係の処理はUIオブジェクトに依存させる
+/// 
+/// 
+/// 
+/// 
+/// 
+/// 
 /// </summary>
 
 public class PlayerController : MonoBehaviour
 {
-    //プレイヤーの移動速度
-    [SerializeField,Header("(仮)移動速度")]
-    private  float _moveSpeed = 5.0f;
 
     //プレイヤーの移動方向
     private Vector2 _forward;//現在は取りえずStartで右方向に決め打ちSceneManagerで生成させるので後で書き換える
@@ -36,15 +48,11 @@ public class PlayerController : MonoBehaviour
     //private Animator _animator;   //後でStart内で取得の処理を入れる
     //GameSceneManager _gameManager;
 
-    //あとでInitに移動する変数達
-    [SerializeField,Header("GameSceneManager")]
-    private GameSceneManager _gameSceneManager;
+    //Init内でPlayer内部に格納するオブジェクト関係
+    GameSceneManager _gameSceneManager;
+    Slider _sliderHP;
+    Slider _sliderXP;
 
-    [SerializeField,Header("SliderXP")]
-    private Slider _sliderXP;
-
-    [SerializeField, Header("SliderHP")]
-    private Slider _sliderHP;
 
     public CharacterStatus _characterStatus;
 
@@ -52,18 +60,55 @@ public class PlayerController : MonoBehaviour
     private float _attackCooldownTimer;//クールダウン計測用変数
     private float _attackCooldownMax = 0.5f;//クールダウンの上限値
 
+    //レベルアップに必要となる経験値リスト
+    List<int> _levelRequirements;
+    //敵の生成装置
+    EnemySpawnerController _enemySpawner;
+    //現在のレベルを表示する先のテキストオブジェクト
+    TextMeshProUGUI _levelText;
+    //備考上記のテキスト変数については、設計的にPlayerが管理するものでは無いので
+    //画面内UIであるLVテキストに管理役割を任せる
+    //Player自身が保持するべき内容はGetLV()で必要となる各所にレベルデータのみを渡す処理
 
 
-    // Start is called before the first frame update
-    void Start()
+    public void Init(GameSceneManager  gameSceneManager,EnemySpawnerController enemySpawnerController,
+           CharacterStatus characterStatus,TextMeshProUGUI textLV,Slider sliderHP,Slider sliderXP)
     {
-        //this._gameManager = GameObject.Find("GameSceneManager").GetComponent<GameSceneManager>();
+        //GameSceneManager内にてInGameScene画開始した時にPlayerをスポーンするため
+        //GameSceneManager内より呼び出せるようにpublic記述
 
 
-        //Rigidbody2Dの取得
-        _rigidbody2d = GetComponent<Rigidbody2D>();
-        _forward = Vector2.right;//右方向に決め打ち→後でInitに移す
+        //以下の部分に各メンバ変数の初期化処理を実行
+        this._levelRequirements = new List<int>();
+
+        this._gameSceneManager = gameSceneManager;
+        this._enemySpawner = enemySpawnerController;
+        this._characterStatus = characterStatus;
+        this._levelText = textLV;
+        this._sliderHP = sliderHP;
+        this._sliderXP = sliderXP;
+        
+        this._rigidbody2d = GetComponent<Rigidbody2D>();
+        _forward = Vector2.right;
+
+
+        //経験値の閾値リストを作成する処理
+        CreateXpTable();
+
+        //最初のレベルアップ(レベル2)に必要な経験値を設置
+        _characterStatus.MaxXP = _levelRequirements[1];
+
+        //以下にUI関連の初期化を行う
+        SetTextLv();
+        SetSliderHP();
+        SetSliderXP();
+
+        MoveSliderHP();
+
+
+
     }
+
 
     // Update is called once per frame
     void Update()
@@ -120,7 +165,7 @@ public class PlayerController : MonoBehaviour
         ClampToMoveBounds(_rigidbody2d.position);
 
         //プレイヤーの移動処理
-        _rigidbody2d.MovePosition(_rigidbody2d.position + _moveInput * _moveSpeed * Time.fixedDeltaTime);
+        _rigidbody2d.MovePosition(_rigidbody2d.position + _moveInput * _characterStatus.MoveSpeed * Time.fixedDeltaTime);
 
         if (_moveInput.x != 0)
         {
@@ -190,7 +235,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void SliderXP()
+    private void SetSliderXP()
     {
         _sliderXP.maxValue = _characterStatus.MaxXP;
         _sliderXP.value = _characterStatus.XP;
@@ -234,4 +279,52 @@ public class PlayerController : MonoBehaviour
             _attackCooldownTimer -= Time.deltaTime;
         }
     }
+
+    /// <summary>
+    /// Init内でPlayerのレベルアップに必要となる
+    /// 経験値の閾値リストを作成処理
+    /// また必要となる経験値画全レベルで定量とならないように
+    /// 
+    /// </summary>
+    private void CreateXpTable()
+    {
+        _levelRequirements.Add(0);
+        for(int i = 1; i < 1000; i++)
+        {
+            //１つ前の閾値の参照を行う
+            int prevXp = _levelRequirements[i-1];
+            //レベルが41を超えた場合には定数的に16XPずつ加算していく
+            int addxp = 16;
+
+            //初回のレベルアップに必要な経験値は5XP
+            if (i == 1)
+            {
+                addxp = 5;
+            }
+            //レベルが20以下の場合には10XPずつ加算していく
+            else if( 20 >= i)
+            {
+
+                addxp = 10;
+            }
+            //レベルが40以下の場合には13XPずつ加算していく
+            else if (40 >= i)
+            {
+                addxp = 13;
+            }
+
+            //各レベルの必要経験値を計算しリストに格納を行う
+            int xp = prevXp + addxp;
+            _levelRequirements.Add(xp);
+
+        }
+    }
+
+    private void SetTextLv()
+    {
+        _levelText.text = "LV" + _characterStatus.Level;
+    }
+
+
+
 }

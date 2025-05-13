@@ -18,14 +18,6 @@ using UnityEngine.UI;
 /// 　  ->この部分の実装はとりあえず後回し
 /// 　  
 /// 
-/// TODO！！！！！！！！！！！！！！
-/// 改修を行うにあたり現在の設計ではPlayerController内に
-/// UIであるPlayerのHP表記を行いPlayerに追従を行うSliderHP
-/// Playerの所持する現在の経験値を表記するSliderXP
-/// Playerの現在のレベルをテキストとして画面上に表記を行っている３項目が
-/// Playerに依存する必要がないため設計の見直しを行う
-/// →UI関係の処理はUIオブジェクトに依存させる
-/// 
 /// 
 /// 
 /// 
@@ -50,8 +42,8 @@ public class PlayerController : MonoBehaviour
 
     //Init内でPlayer内部に格納するオブジェクト関係
     GameSceneManager _gameSceneManager;
-    Slider _sliderHP;
-    Slider _sliderXP;
+    //Slider _sliderHP;
+    //Slider _sliderXP;
 
 
     public CharacterStatus _characterStatus;
@@ -85,8 +77,8 @@ public class PlayerController : MonoBehaviour
         this._enemySpawner = enemySpawnerController;
         this._characterStatus = characterStatus;
         this._levelText = textLV;
-        this._sliderHP = sliderHP;
-        this._sliderXP = sliderXP;
+        //this._sliderHP = sliderHP; UIの切り離しが完了したら消す事
+        //this._sliderXP = sliderXP;
         
         this._rigidbody2d = GetComponent<Rigidbody2D>();
         _forward = Vector2.right;
@@ -99,11 +91,12 @@ public class PlayerController : MonoBehaviour
         _characterStatus.MaxXP = _levelRequirements[1];
 
         //以下にUI関連の初期化を行う
-        SetTextLv();
-        SetSliderHP();
-        SetSliderXP();
+        //以下のUI関係のものは切り離しを行う
+        //SetTextLv();
+        //SetSliderHP();
+        //SetSliderXP();
 
-        MoveSliderHP();
+        //MoveSliderHP();
 
 
 
@@ -125,7 +118,7 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
 
         //HPスライダーの移動処理
-        MoveSliderHP();
+       // MoveSliderHP();
 
         
     }
@@ -190,15 +183,17 @@ public class PlayerController : MonoBehaviour
         _rigidbody2d.position = pos;
     }
 
-    /// <summary>
-    /// Canvas上のHPスライダー画プレイヤーを追従する処理
-    /// 
-    private void MoveSliderHP()
-    {
-        Vector3 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position);
-        pos.y -= 125;
-        _sliderHP.transform.position = pos;
-    }
+
+
+    ///// <summary>
+    ///// Canvas上のHPスライダーがプレイヤーを追従する処理
+    ///// 
+    //private void MoveSliderHP()
+    //{
+    //    Vector3 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position);
+    //    pos.y -= 125;
+    //    _sliderHP.transform.position = pos;
+    //}
 
 
      public void Damage(float attack)
@@ -221,25 +216,25 @@ public class PlayerController : MonoBehaviour
 
         if(0 > _characterStatus.HP) _characterStatus.HP = 0;
 
-        SetSliderHP();
+        //SetSliderHP();
     }
 
 
-    /// <summary>
-    /// HPスライダーの初期化処理と更新を行う
-    /// </summary>
-    private void SetSliderHP()
-    {
-        _sliderHP.maxValue = _characterStatus.MaxHP;
-        _sliderHP.value = _characterStatus.HP;
+    ///// <summary>
+    ///// HPスライダーの初期化処理と更新を行う
+    ///// </summary>
+    //private void SetSliderHP()
+    //{
+    //    _sliderHP.maxValue = _characterStatus.MaxHP;
+    //    _sliderHP.value = _characterStatus.HP;
 
-    }
+    //}
 
-    private void SetSliderXP()
-    {
-        _sliderXP.maxValue = _characterStatus.MaxXP;
-        _sliderXP.value = _characterStatus.XP;
-    }
+    //private void SetSliderXP()
+    //{
+    //    _sliderXP.maxValue = _characterStatus.MaxXP;
+    //    _sliderXP.value = _characterStatus.XP;
+    //}
 
  
     //衝突した時の処理
@@ -320,11 +315,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void SetTextLv()
-    {
-        _levelText.text = "LV" + _characterStatus.Level;
-    }
+    //private void SetTextLv()
+    //{
+    //    _levelText.text = "LV" + _characterStatus.Level;
+    //}
 
+
+    //以下各種UIオブジェクトに提供をするPublic変数
+    public float currentHP => _characterStatus.HP;
+    public float maxHP => _characterStatus.MaxHP;
+
+    public float currentXP => _characterStatus.XP;
+    public float maxXP => _characterStatus.MaxXP;
+
+    public int currentLevel => _characterStatus.Level;
 
 
 }

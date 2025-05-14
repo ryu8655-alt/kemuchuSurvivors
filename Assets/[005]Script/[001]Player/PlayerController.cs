@@ -43,7 +43,6 @@ public class PlayerController : MonoBehaviour
 
     //Init内でPlayer内部に格納するオブジェクト関係
     GameSceneManager _gameSceneManager;
-    //Slider _sliderHP;
     //Slider _sliderXP;
 
 
@@ -72,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
 
     public void Init(GameSceneManager  gameSceneManager,EnemySpawnerController enemySpawnerController,
-           CharacterStatus characterStatus,TextMeshProUGUI textLV,Slider sliderHP,Slider sliderXP)
+           CharacterStatus characterStatus)
     {
         //GameSceneManager内にてInGameScene画開始した時にPlayerをスポーンするため
         //GameSceneManager内より呼び出せるようにpublic記述
@@ -84,8 +83,7 @@ public class PlayerController : MonoBehaviour
         this._gameSceneManager = gameSceneManager;
         this._enemySpawner = enemySpawnerController;
         this._characterStatus = characterStatus;
-        this._levelText = textLV;
-        //this._sliderHP = sliderHP; UIの切り離しが完了したら消す事
+        //this._levelText = textLV;
         //this._sliderXP = sliderXP;
         
         this._rigidbody2d = GetComponent<Rigidbody2D>();
@@ -101,10 +99,8 @@ public class PlayerController : MonoBehaviour
         //以下にUI関連の初期化を行う
         //以下のUI関係のものは切り離しを行う
         //SetTextLv();
-        //SetSliderHP();
         //SetSliderXP();
 
-        //MoveSliderHP();
 
 
 
@@ -124,9 +120,6 @@ public class PlayerController : MonoBehaviour
         
         //プレイヤーの移動処理
         MovePlayer();
-
-        //HPスライダーの移動処理
-       // MoveSliderHP();
 
         
     }
@@ -192,18 +185,6 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
-    ///// <summary>
-    ///// Canvas上のHPスライダーがプレイヤーを追従する処理
-    ///// 
-    //private void MoveSliderHP()
-    //{
-    //    Vector3 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position);
-    //    pos.y -= 125;
-    //    _sliderHP.transform.position = pos;
-    //}
-
-
      public void Damage(float attack)
     {
         //非アクティブ状態の時はダメージを受けない
@@ -226,20 +207,8 @@ public class PlayerController : MonoBehaviour
         }
 
         if(0 > _characterStatus.HP) _characterStatus.HP = 0;
-
-        //SetSliderHP();
     }
 
-
-    ///// <summary>
-    ///// HPスライダーの初期化処理と更新を行う
-    ///// </summary>
-    //private void SetSliderHP()
-    //{
-    //    _sliderHP.maxValue = _characterStatus.MaxHP;
-    //    _sliderHP.value = _characterStatus.HP;
-
-    //}
 
     //private void SetSliderXP()
     //{

@@ -39,13 +39,15 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField, Header("EnemySpawner")]
     private EnemySpawnerController _enemySpawnerController;
 
-    //プレイヤー生成
+    // //プレイヤー生成
     [SerializeField]
-    Slider _sliderHP;
+    private SliderHPController _sliderHPController;
     [SerializeField]
-    Slider _sliderXP;
-    [SerializeField]
-    TextMeshProUGUI _textLv;
+    private SliderXPController _sliderXPController;
+    // [SerializeField]
+    //// Slider _sliderXP;
+    // [SerializeField]
+    // //TextMeshProUGUI _textLv;
 
 
 
@@ -55,9 +57,10 @@ public class GameSceneManager : MonoBehaviour
     {
         // InGameスタート時にPlayerの生成を行う
         int playerId = 0;
-        _playerController = CharacterSettings.Instance.CreatePlayer(playerId, this, _enemySpawnerController,
-                                                                     _textLv, _sliderHP, _sliderXP);
+        _playerController = CharacterSettings.Instance.CreatePlayer(playerId, this, _enemySpawnerController);
 
+        _sliderHPController.Init(_playerController);
+        _sliderXPController.Init(_playerController);
 
 
 

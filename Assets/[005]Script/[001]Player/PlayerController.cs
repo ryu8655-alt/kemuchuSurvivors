@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 /// <summary>
 /// プレイヤーの動き
 /// 移動
@@ -61,6 +62,13 @@ public class PlayerController : MonoBehaviour
     //備考上記のテキスト変数については、設計的にPlayerが管理するものでは無いので
     //画面内UIであるLVテキストに管理役割を任せる
     //Player自身が保持するべき内容はGetLV()で必要となる各所にレベルデータのみを渡す処理
+
+
+
+    //追加　UIに通知を行うイベント
+    public event Action<float, float> OnHPChanged;
+    public event Action<float, float> OnXPChanged;
+    public event Action<int> OnLevelChanged;
 
 
     public void Init(GameSceneManager  gameSceneManager,EnemySpawnerController enemySpawnerController,
@@ -207,6 +215,9 @@ public class PlayerController : MonoBehaviour
         Debug.Log($"Player Damaged: {damage}");
         //ダメージ表示
         _gameSceneManager.DispDamage(gameObject, damage);
+
+        //HP変化のイベントを発行してUIに通知を送る
+        OnHPChanged?.Invoke(_characterStatus.HP, _characterStatus.MaxHP);
 
         //TODO　ゲームオーバー処理を追加する
         if ( 0 > _characterStatus.HP)

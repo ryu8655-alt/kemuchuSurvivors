@@ -14,7 +14,7 @@ public class BaseWeapon : MonoBehaviour
     protected Vector2 _forward;
 
     //初期化処理
-    public void init(BaseWeaponSpawner spawner, Vector2 foward)
+    public void init(BaseWeaponSpawner spawner, Vector2 forward)
     {
         //親の武器生成装置
         this._weaponSpawner = spawner;
@@ -23,7 +23,7 @@ public class BaseWeapon : MonoBehaviour
         //物理挙動
         this._rigidbody2d = GetComponent<Rigidbody2D>();
         //方向
-        this._forward = foward;
+        this._forward = forward;
 
         //生存時間がある場合は設定する
         if (-1 < _weaponStatus.AliveTime)
@@ -39,7 +39,7 @@ public class BaseWeapon : MonoBehaviour
         float damage = enemy.Damage(attackPower);
 
         //総ダメージにも加算する
-        _weaponSpawner._toatalDamage += damage;
+        _weaponSpawner._totalDamage += damage;
 
         //貫通数の設定がある場合は減産する
         if (0 > _weaponStatus.PenetrationCount) return;

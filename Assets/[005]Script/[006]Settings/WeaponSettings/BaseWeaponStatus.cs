@@ -19,6 +19,7 @@ public enum WeaponStatusType
     SpawnIntervalMin,
 }
 
+[System.Serializable]
 public class BaseWeaponStatus
 {
     //Inspectorから設定するステータス

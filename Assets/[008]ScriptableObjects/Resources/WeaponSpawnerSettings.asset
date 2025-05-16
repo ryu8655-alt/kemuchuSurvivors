@@ -12,24 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86d41e3ed0f4d544facbed7d0afd7678, type: 3}
   m_Name: WeaponSpawnerSettings
   m_EditorClassIdentifier: 
-  baseWeaponStatuseList:
-  - Title: 
-    Id: 0
-    Level: 0
-    Name: 
-    Description: 
-    Attack: 0
-    PenetrationCount: 0
-    Speed: 0
-    AliveTime: 0
-    Prefab: {fileID: 0}
-    Icon: {fileID: 0}
-    SpawnCount: 0
-    SpawnIntervalMax: 0
-    SpawnIntervalMin: 0
-    GrowSteps:
-    - Level: 0
-      Bonuses:
-      - Type: 0
-        ApplyType: 0
-        Value: 0
+  baseWeaponStatuseList: []

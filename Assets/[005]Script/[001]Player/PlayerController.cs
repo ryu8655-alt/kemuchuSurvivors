@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 {
 
     //プレイヤーの移動方向
-    private Vector2 _forward;//現在は取りえずStartで右方向に決め打ちSceneManagerで生成させるので後で書き換える
+    public Vector2 _forward;//現在は取りえずStartで右方向に決め打ちSceneManagerで生成させるので後で書き換える
     //→補足左右方向でしか向きは変えない、上下の移動では向きの変更は行わない
 
     //プレイヤーの進行方向
@@ -64,6 +64,10 @@ public class PlayerController : MonoBehaviour
 
 
 
+    //現在装備中の武器
+    public List<BaseWeaponSpawner> _weaponSpawners;
+
+
     //追加　UIに通知を行うイベント
     public event Action<float, float> OnHPChanged;
     public event Action<float, float> OnXPChanged;
@@ -79,6 +83,7 @@ public class PlayerController : MonoBehaviour
 
         //以下の部分に各メンバ変数の初期化処理を実行
         this._levelRequirements = new List<int>();
+        this._weaponSpawners = new List<BaseWeaponSpawner>();
 
         this._gameSceneManager = gameSceneManager;
         this._enemySpawner = enemySpawnerController;
@@ -87,6 +92,10 @@ public class PlayerController : MonoBehaviour
         //this._sliderXP = sliderXP;
         
         this._rigidbody2d = GetComponent<Rigidbody2D>();
+        //コーディング段階ではAnimationの素材、本環境にアタッチする内容の素材ができていないので
+        //コメントアウト
+        //this._animator = GetComponent<Animator>();
+
         _forward = Vector2.right;
 
 
@@ -95,6 +104,15 @@ public class PlayerController : MonoBehaviour
 
         //最初のレベルアップ(レベル2)に必要な経験値を設置
         _characterStatus.MaxXP = _levelRequirements[1];
+
+
+        //武器データのセット
+        foreach(var item in _characterStatus._defaultWeaponIds)
+        {
+            //武器のスポーン処理を行う
+            AddWeaponSpawner(item);
+        }
+
 
         //以下にUI関連の初期化を行う
         //以下のUI関係のものは切り離しを行う
@@ -300,6 +318,31 @@ public class PlayerController : MonoBehaviour
     //    _levelText.text = "LV" + _characterStatus.Level;
     //}
 
+
+    //武器を追加する
+    private void AddWeaponSpawner(int id)
+    {
+        //TODO　　装備済みならレベルアップする
+        BaseWeaponSpawner weaponSpawner = _weaponSpawners.Find(item => item._weaponStatus.Id == id);
+
+
+            if (weaponSpawner)
+        {
+            return;
+        }
+
+        //新規に追加する処理
+        weaponSpawner = WeaponSpawnerSettings.Instance.CreateWeaponSpawner(id,_enemySpawner, transform);
+
+        if(null == weaponSpawner)
+        {
+            Debug.LogError("武器データがありません");
+            return;
+        }
+        //装備済みのリストへ追加する
+        _weaponSpawners.Add(weaponSpawner);
+
+    }
 
     //以下各種UIオブジェクトに提供をするPublic変数
     public float currentHP => _characterStatus.HP;

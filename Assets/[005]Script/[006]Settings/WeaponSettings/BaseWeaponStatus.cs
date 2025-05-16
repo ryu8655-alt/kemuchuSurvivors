@@ -47,8 +47,8 @@ public class BaseWeaponStatus
     public float AliveTime;
 
     [Header("外観")]
-    //武器のプレハブ
-    public GameObject Prefab;
+    //武器スポナーのプレハブ
+    public GameObject PrefabSpawner;
     //武器アイコン
     public Sprite Icon;
 
@@ -136,6 +136,7 @@ public class BaseWeaponStatus
             }
         }
     }
+
 }
 
 

@@ -79,6 +79,19 @@ public class BaseWeaponSpawner : MonoBehaviour
         }
     }
 
+
+    //タイマー消化チェック処理
+    protected bool isSpawnTimerNotElapsed()
+    {
+
+        //タイマー消化
+        _spawnTimer -= Time.deltaTime;
+        if(0 < _spawnTimer)return true;
+        return false;
+    }
+
+
+
     //レベルアップ時のデータを適用する
 
 }

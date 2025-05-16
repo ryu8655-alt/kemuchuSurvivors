@@ -68,7 +68,7 @@ public class WeaponSpawnerSettings : ScriptableObject
         //データを取得
         BaseWeaponStatus weaponStatus = Get(id, 1);
         //オブジェクトの作成
-        GameObject obj = Instantiate(weaponStatus.Prefab, parent);
+        GameObject obj = Instantiate(weaponStatus.PrefabSpawner, parent);
 
         //データセット
         BaseWeaponSpawner weaponSpawner = obj.GetComponent<BaseWeaponSpawner>();
@@ -76,6 +76,5 @@ public class WeaponSpawnerSettings : ScriptableObject
 
         return weaponSpawner;
     }
-
 
 }

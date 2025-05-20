@@ -12,4 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86d41e3ed0f4d544facbed7d0afd7678, type: 3}
   m_Name: WeaponSpawnerSettings
   m_EditorClassIdentifier: 
-  baseWeaponStatuseList: []
+  baseWeaponStatuseList:
+  - Title: "\u5F13"
+    Id: 2
+    Level: 1
+    Name: "\u5F13"
+    Description: "\u30E9\u30F3\u30C0\u30E0\u306A\u6575\u306B\u5411\u304B\u3063\u3066\u8CAB\u901A\u3059\u308B\u5F13\u3092\u653E\u3064\n\u8CAB\u901A\u6642\u306F30\uFF05\u306E\u30C0\u30E1\u30FC\u30B8\u3092\u4E0E\u3048\u308B"
+    Attack: 15
+    PenetrationCount: -1
+    Speed: 10
+    AliveTime: 10
+    PrefabSpawner: {fileID: 8380710924769020372, guid: 9709eb0777f1ad342a29956582fea872, type: 3}
+    Icon: {fileID: -574902017, guid: fe9d176ce4b73467ab961a542a54e03d, type: 3}
+    SpawnCount: 2
+    SpawnIntervalMax: 2
+    SpawnIntervalMin: 3
+    GrowSteps: []

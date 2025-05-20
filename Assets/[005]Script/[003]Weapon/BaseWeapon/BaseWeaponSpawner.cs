@@ -90,6 +90,11 @@ public class BaseWeaponSpawner : MonoBehaviour
         return false;
     }
 
+    protected float GetRandomSpawnTimer()
+    {
+        return Random.Range(_weaponStatus.SpawnIntervalMin, _weaponStatus.SpawnIntervalMax);
+    }
+
 
 
     //レベルアップ時のデータを適用する

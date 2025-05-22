@@ -24,7 +24,37 @@ MonoBehaviour:
     AliveTime: 10
     PrefabSpawner: {fileID: 8380710924769020372, guid: 9709eb0777f1ad342a29956582fea872, type: 3}
     Icon: {fileID: -574902017, guid: fe9d176ce4b73467ab961a542a54e03d, type: 3}
-    SpawnCount: 2
+    SpawnCount: 1
+    SpawnIntervalMax: 2
+    SpawnIntervalMin: 3
+    GrowSteps: []
+  - Title: "\u65A7"
+    Id: 3
+    Level: 1
+    Name: "\u65A7"
+    Description: "\t"
+    Attack: 30
+    PenetrationCount: -1
+    Speed: 0
+    AliveTime: 5
+    PrefabSpawner: {fileID: 2738676587928192360, guid: 56e8ddb869689e94dba6c55d097a29d3, type: 3}
+    Icon: {fileID: -35660143, guid: fe9d176ce4b73467ab961a542a54e03d, type: 3}
+    SpawnCount: 1
+    SpawnIntervalMax: 3
+    SpawnIntervalMin: 4
+    GrowSteps: []
+  - Title: "\u30D6\u30FC\u30E1\u30E9\u30F3"
+    Id: 4
+    Level: 1
+    Name: "\u30D6\u30FC\u30E1\u30E9\u30F3"
+    Description: "\t"
+    Attack: 15
+    PenetrationCount: -1
+    Speed: 500
+    AliveTime: 10
+    PrefabSpawner: {fileID: 2291893878784956561, guid: dbd36da3afd796b40bac8f3b36e06597, type: 3}
+    Icon: {fileID: 1436518502, guid: fe9d176ce4b73467ab961a542a54e03d, type: 3}
+    SpawnCount: 1
     SpawnIntervalMax: 2
     SpawnIntervalMin: 3
     GrowSteps: []

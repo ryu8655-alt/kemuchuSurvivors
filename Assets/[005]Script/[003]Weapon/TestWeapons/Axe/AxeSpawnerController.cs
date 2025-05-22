@@ -28,7 +28,7 @@ public class AxeSpawnerController : BaseWeaponSpawner
 
         //次の生成タイマー
         _spawnTimer = _onceSpawnTime;
-        _onceSpawnTime--;
+        _onceSpawnCount--;
 
         //生成数が０以下になったら終了
         if (1 > _onceSpawnCount)

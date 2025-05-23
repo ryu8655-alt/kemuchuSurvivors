@@ -33,7 +33,7 @@ public class KnifeSpawnerController : BaseWeaponSpawner
         //1回の生成が終わったらリセット
         if(1 > _onceSpawnCount)
         {
-            _totalDamage = GetRandomSpawnTimer();
+            _spawnTimer = GetRandomSpawnTimer();
             _onceSpawnCount = (int)_weaponStatus.SpawnCount;
         }
 

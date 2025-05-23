@@ -13,6 +13,21 @@ MonoBehaviour:
   m_Name: WeaponSpawnerSettings
   m_EditorClassIdentifier: 
   baseWeaponStatuseList:
+  - Title: "\u30B9\u30E9\u30C3\u30B7\u30E5"
+    Id: 1
+    Level: 1
+    Name: "\u30B9\u30E9\u30C3\u30B7\u30E5"
+    Description: 
+    Attack: 15
+    PenetrationCount: -1
+    Speed: 0
+    AliveTime: 0.5
+    PrefabSpawner: {fileID: 1929474060989147824, guid: 26397bdcb80f24d41a3d5de081919176, type: 3}
+    Icon: {fileID: -1773897344, guid: fe9d176ce4b73467ab961a542a54e03d, type: 3}
+    SpawnCount: 2
+    SpawnIntervalMax: 2
+    SpawnIntervalMin: 2
+    GrowSteps: []
   - Title: "\u5F13"
     Id: 2
     Level: 1
@@ -57,4 +72,34 @@ MonoBehaviour:
     SpawnCount: 1
     SpawnIntervalMax: 2
     SpawnIntervalMin: 3
+    GrowSteps: []
+  - Title: "\u30CA\u30A4\u30D5"
+    Id: 5
+    Level: 1
+    Name: "\u30CA\u30A4\u30D5"
+    Description: "\u30D7\u30EC\u30A4\u30E4\u30FC\u306E\u9032\u884C\u65B9\u5411\u306B\u30CA\u30A4\u30D5\u3092\u6295\u3052\u308B"
+    Attack: 10
+    PenetrationCount: 0
+    Speed: 10
+    AliveTime: 10
+    PrefabSpawner: {fileID: 3193409758465746621, guid: 6f035d5d3fda2504191293c89d3a3e4a, type: 3}
+    Icon: {fileID: 1904217932, guid: fe9d176ce4b73467ab961a542a54e03d, type: 3}
+    SpawnCount: 1
+    SpawnIntervalMax: 3
+    SpawnIntervalMin: 3
+    GrowSteps: []
+  - Title: "\u30B7\u30FC\u30EB\u30C9"
+    Id: 6
+    Level: 1
+    Name: "\u30CA\u30A4\u30D5"
+    Description: "\u30D7\u30EC\u30A4\u30E4\u30FC\u306E\u5468\u308A\u3092\u5468\u56DE\u3057\u3001\u6575\u3092\u8DF3\u306D\u8FD4\u3059\u30B7\u30FC\u30EB\u30C9"
+    Attack: 5
+    PenetrationCount: -1
+    Speed: 10
+    AliveTime: 10
+    PrefabSpawner: {fileID: 6963309141640328951, guid: 86a889e7dc5b73a42b8286feb576e3a7, type: 3}
+    Icon: {fileID: -1350194950, guid: fe9d176ce4b73467ab961a542a54e03d, type: 3}
+    SpawnCount: 3
+    SpawnIntervalMax: 15
+    SpawnIntervalMin: 15
     GrowSteps: []

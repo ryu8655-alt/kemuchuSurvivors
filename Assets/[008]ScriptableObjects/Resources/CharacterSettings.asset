@@ -28,7 +28,7 @@ MonoBehaviour:
     PickUpRange: 0.5
     AliveTime: 0
     _characterPrefab: {fileID: 1870053568670532232, guid: 1bbfb0b059fd3b044b3de0b9632a2193, type: 3}
-    _defaultWeaponIds: 06000000
+    _defaultWeaponIds: 020000000300000004000000
     _usableWeaponIds: 000000000100000002000000030000000400000005000000060000000700000008000000
     _usableWeaponMax: 6
     _moveType: 0

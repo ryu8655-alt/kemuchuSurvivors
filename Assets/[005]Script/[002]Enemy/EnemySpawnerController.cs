@@ -36,6 +36,11 @@ public class EnemySpawnData
     [Header("最大スポーン数")]
     public int _spawncountMax;
 
+    [Header("スポーン最大総数")]
+    [Tooltip("スポーン総数の上限を設定します。\n" +
+             "-1の場合は無制限になります。")]
+    public int _spawnTotalMax = -1; //-1の場合は無制限
+
     [Header("スポーンをさせるエネミーデータID")]
     public List<int> _enemyIds;
 
@@ -62,6 +67,9 @@ public class EnemySpawnerController : MonoBehaviour
     private int _spawnDataIndex;
     //敵のスポーン位置
     const float _spawnRadius = 13;
+
+    //スポーン済みの敵数をカウントする変数
+    private int _currentSpawnTotal;
 
 
     //初期化処理
@@ -115,6 +123,12 @@ public class EnemySpawnerController : MonoBehaviour
 
     private void CreateRandomEnemy(Vector3 position)
     {
+
+        //スポーン総数の上限を超えている場合は処理を抜ける
+        if (_enemySpawnData._spawnTotalMax != -1 && _currentSpawnTotal >= _enemySpawnData._spawnTotalMax) return;
+
+
+
         //データ内からランダムなIDを取得する
         int rnd = Random.Range(0, _enemySpawnData._enemyIds.Count);
         int id = _enemySpawnData._enemyIds[rnd];
@@ -122,6 +136,9 @@ public class EnemySpawnerController : MonoBehaviour
         //敵生成
         EnemyController enemy = CharacterSettings.Instance.CretaeEnemy(id , _gameSceneManager, position);
         enemies.Add(enemy);
+
+        //スポーン済みの敵数をカウントする
+        _currentSpawnTotal++;
     }
 
     /// <summary>
@@ -209,6 +226,9 @@ public class EnemySpawnerController : MonoBehaviour
         if(elapsedSeconds < _gameSceneManager._gameTimer)
         {
             _enemySpawnData = _enemySpawnDatas[idx];
+
+            //スポーン数をリセットする
+            _currentSpawnTotal = 0;
 
             //次回用の設定
             _spawnDataIndex = idx;

@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
     //Init内でPlayer内部に格納するオブジェクト関係
     GameSceneManager _gameSceneManager;
-    //Slider _sliderXP;
+    Slider _sliderXP;
 
 
     public CharacterStatus _characterStatus;
@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
 
 
     public void Init(GameSceneManager  gameSceneManager,EnemySpawnerController enemySpawnerController,
-           CharacterStatus characterStatus)
+           CharacterStatus characterStatus,TextMeshProUGUI textLV , Slider sliderXP)
     {
         //GameSceneManager内にてInGameScene画開始した時にPlayerをスポーンするため
         //GameSceneManager内より呼び出せるようにpublic記述
@@ -88,8 +88,8 @@ public class PlayerController : MonoBehaviour
         this._gameSceneManager = gameSceneManager;
         this._enemySpawner = enemySpawnerController;
         this._characterStatus = characterStatus;
-        //this._levelText = textLV;
-        //this._sliderXP = sliderXP;
+        this._levelText = textLV;
+        this._sliderXP = sliderXP;
         
         this._rigidbody2d = GetComponent<Rigidbody2D>();
         //コーディング段階ではAnimationの素材、本環境にアタッチする内容の素材ができていないので
@@ -116,8 +116,8 @@ public class PlayerController : MonoBehaviour
 
         //以下にUI関連の初期化を行う
         //以下のUI関係のものは切り離しを行う
-        //SetTextLv();
-        //SetSliderXP();
+        SetTextLv();
+        SetSliderXP();
 
 
 
@@ -228,13 +228,13 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //private void SetSliderXP()
-    //{
-    //    _sliderXP.maxValue = _characterStatus.MaxXP;
-    //    _sliderXP.value = _characterStatus.XP;
-    //}
+    private void SetSliderXP()
+    {
+        _sliderXP.maxValue = _characterStatus.MaxXP;
+        _sliderXP.value = _characterStatus.XP;
+    }
 
- 
+
     //衝突した時の処理
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -313,10 +313,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //private void SetTextLv()
-    //{
-    //    _levelText.text = "LV" + _characterStatus.Level;
-    //}
+    private void SetTextLv()
+    {
+        _levelText.text = "LV" + _characterStatus.Level;
+    }
 
 
     //武器を追加する
@@ -353,5 +353,33 @@ public class PlayerController : MonoBehaviour
 
     public int currentLevel => _characterStatus.Level;
 
+
+    public void GetXP(float xp)
+    {
+        _characterStatus.XP += xp;
+
+        //レベル上限の場合は処理を抜ける
+        if (_levelRequirements.Count - 1 < _characterStatus.Level) return;
+
+        //レベルアップ処理
+        if (_levelRequirements[_characterStatus.Level] <= _characterStatus.XP)
+        {
+            _characterStatus.Level++;
+
+            //次の経験値を設定する
+            if(_characterStatus.Level < _levelRequirements.Count)
+            {
+                _characterStatus.XP = 0;
+                _characterStatus.MaxXP = _levelRequirements[_characterStatus.Level];
+            }
+
+            //TODOレベルアップパネルの表示処理
+            SetTextLv();
+        }
+
+        //ＸＰ表示更新
+        SetSliderXP();
+
+    }
 
 }

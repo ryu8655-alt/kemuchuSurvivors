@@ -179,7 +179,8 @@ public class EnemyController : MonoBehaviour
         //経験値の生成
         if (createXP)
         {
-            //経験値の生成処理を後で追加する
+            //経験値生成
+            _gameSceneManager.CreateXP(this);
         }
 
         _state = State.Dead;

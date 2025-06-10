@@ -68,7 +68,8 @@ public class CharacterSettings : ScriptableObject
         return enemyController;
     }
 
-    public PlayerController CreatePlayer(int id ,GameSceneManager gameSceneManager,EnemySpawnerController enemySpawner)
+    public PlayerController CreatePlayer(int id ,GameSceneManager gameSceneManager,EnemySpawnerController enemySpawner,
+        TextMeshProUGUI textLV , Slider sliderXP)
     {
         //ID指定されたキャラクターステータスの取得を行う
         CharacterStatus status =  Instance.Get(id);
@@ -78,7 +79,7 @@ public class CharacterSettings : ScriptableObject
 
         //データセット
         PlayerController ctrl = obj.GetComponent<PlayerController>();
-        ctrl.Init(gameSceneManager,enemySpawner,status);
+        ctrl.Init(gameSceneManager,enemySpawner,status,textLV,sliderXP);
 
         return ctrl;
     }       

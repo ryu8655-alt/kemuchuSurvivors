@@ -44,10 +44,14 @@ public class GameSceneManager : MonoBehaviour
     private SliderHPController _sliderHPController;
     [SerializeField]
     private SliderXPController _sliderXPController;
-    // [SerializeField]
-    //// Slider _sliderXP;
-    // [SerializeField]
-    // //TextMeshProUGUI _textLv;
+    [SerializeField]
+    Slider _sliderXP;
+    [SerializeField]
+    TextMeshProUGUI _textLv;
+
+    //経験値プレハブリスト
+    [SerializeField]
+    List<GameObject> prefabXP;
 
 
 
@@ -57,7 +61,7 @@ public class GameSceneManager : MonoBehaviour
     {
         // InGameスタート時にPlayerの生成を行う
         int playerId = 0;
-        _playerController = CharacterSettings.Instance.CreatePlayer(playerId, this, _enemySpawnerController);
+        _playerController = CharacterSettings.Instance.CreatePlayer(playerId, this, _enemySpawnerController,_textLv,_sliderXP);
 
         _sliderHPController.Init(_playerController);
         _sliderXPController.Init(_playerController);
@@ -127,4 +131,33 @@ public class GameSceneManager : MonoBehaviour
         _textTimer.text = Utils.GetTextTimer(_gameTimer);
         _oldSeconds = seconds;
     }
+
+
+    public void CreateXP(EnemyController enemy)
+    {
+        float xp = Random.Range(enemy._characterStatus.XP,enemy._characterStatus.MaxXP);
+        if (0 > xp) return;
+
+        //5未満
+        GameObject prefab = prefabXP[0];
+
+        //10以上
+        if (10 <= xp)
+        {
+            prefab = prefabXP[2];
+        }
+        else if (5 <= xp)
+        {
+            prefab = prefabXP[1];
+        }
+
+        //初期化とアイテムの生成
+        GameObject obj = Instantiate(prefab, enemy.transform.position, Quaternion.identity);
+        XPContoroller ctrl = obj.GetComponent<XPContoroller>();
+        ctrl.Init(this, xp);
+    }   
+
+
 }
+
+
